@@ -56,6 +56,8 @@ INSERT INTO OrderDetails VALUES (9004, 5003, 104, 1); -- Mehmet 1 Tablet aldı
 INSERT INTO OrderDetails VALUES (9005, 5004, 101, 1); -- Zeynep 1 Laptop aldı
 INSERT INTO OrderDetails VALUES (9006, 5004, 103, 3); -- Zeynep 3 Kulaklık aldı
 
+select * from ORDERDETAILS
+
 SELECT c.Name, o.OrderID, o.OrderDate
 FROM Customers c
 JOIN Orders o ON c.CustomerID = o.CustomerID;
@@ -65,8 +67,6 @@ FROM Orders o
 JOIN OrderDetails od ON o.OrderID = od.OrderID
 JOIN Products p ON od.ProductID = p.ProductID
 GROUP BY o.OrderID;
-
-select * from ORDERDETAILS
 
 select p.ProductName, p.Stock, o.Quantity
 from Products p
