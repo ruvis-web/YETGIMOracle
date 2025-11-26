@@ -1,4 +1,5 @@
 # YETGIMOracle
+
 -- Müşteriler tablosu
 CREATE TABLE Customers (
     CustomerID NUMBER PRIMARY KEY,
@@ -62,12 +63,14 @@ SELECT c.Name, o.OrderID, o.OrderDate
 FROM Customers c
 JOIN Orders o ON c.CustomerID = o.CustomerID;
 
+--Sipariş ID'sini ve aylık toplam totali veren sorguyu yazınız.
 SELECT o.OrderID, SUM(p.Price * od.Quantity) AS TotalAmount
 FROM Orders o
 JOIN OrderDetails od ON o.OrderID = od.OrderID
 JOIN Products p ON od.ProductID = p.ProductID
 GROUP BY o.OrderID;
 
+--Ürün isimlerini, stok miktarlarını ve sipariş miktarlarını getiren sorguyu yazın.
 select p.ProductName, p.Stock, o.Quantity
 from Products p
 left join OrderDetails o
@@ -84,3 +87,28 @@ from customers e
 inner join Orders o on e.CustomerID = o.CustomerID
 inner join orderdetails d on d.OrderID = o.OrderID
 inner join Products p on p.ProductID = d.ProductID
+
+--Genel ürün ortalama stok miktarının üstünde kalan ürün bazlı ortalama stok miktarını eblirleyen sorguyu yazın.
+select ProductName, AVG(stock) as avg_stock
+from Products
+group by ProductID
+having avg(stock) > (
+    select avg(stock)
+    from Products
+)
+
+--Tüm ürünlerin en yakın sipariş tarihlerini listeleyen sorguyu yazın.
+SELECT 
+    p.ProductID,
+    p.ProductName,
+    MIN(o.OrderDate) AS FirstOrderDate
+FROM Products p
+JOIN OrderDetails od ON p.ProductID = od.ProductID
+JOIN Orders o ON od.OrderID = o.OrderID
+GROUP BY p.ProductID, p.ProductName
+ORDER BY FirstOrderDate;
+
+--Sipariş tarihlerini "dd-mon-yyyy" modeline göre formatlayan sorguyu yazın.
+select OrderDate,
+to_char( OrderDate,'DD-MON-YYYY') as formated_order_date
+from Orders
